@@ -1,3 +1,5 @@
+require "byebug"
+
 class Board
   attr_accessor :cups
 
@@ -15,11 +17,16 @@ class Board
     # helper method to #initialize every non-store cup with four stones each
   end
 
+  begin
+    
+  rescue => exception
+    
+  end
   def valid_move?(start_pos)
+    # debugger
+      raise "Invalid starting cup" unless @cups[start_pos] != nil && start_pos != 13
     
-      raise "Invalid starting cup" unless @cups.index(start_pos) != nil
-    
-      raise "Starting cup is empty" if @cups.index(start_pos) != nil && @cups[start_pos].empty?
+      raise "Starting cup is empty" if @cups[start_pos].empty?
     
   end
 
