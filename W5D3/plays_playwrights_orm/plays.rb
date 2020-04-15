@@ -134,8 +134,31 @@ class Playwright
     SQL
   end
 
-  def get_plays
+  # ADDED A CLASS METHOD 'delete_by_name' THAT ACCEPTS A NAME AND DELETES A RECORD THAT HAS THAT NAME
+  def self.delete_by_name(name)
+    # FIX RAISE!
+    # raise "#{name} not found in database!" unless PlayDBConnection.instance.execute("SELECT * FROM plays WHERE name = '#{name}'")
+    PlayDBConnection.instance.execute(<<-SQL)
+      DELETE FROM 
+        playwrights 
+      WHERE 
+        playwrights.name = '#{name}'
+    SQL
+    # data.map {|datum| Play.new(datum)}
+  end
 
+  def get_plays
+    data = PlayDBConnection.instance.execute(<<-SQL)
+      SELECT
+        *
+      FROM
+        plays
+      JOIN
+        playwrights ON playwrights.id = plays.playwright_id
+      WHERE
+        plays.playwright_id = '#{self.id}'
+    SQL
+    data.map {|datum| Playwright.new(datum)}
   end
 
 end
@@ -161,4 +184,8 @@ end
 
 # new_playwright = Playwright.new('name'=>'Shakespeare', 'birth_year'=>1545)
 # new_playwright.create
+
+# p Playwright.all
+
+# p P
 
